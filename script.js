@@ -1,166 +1,422 @@
-// ==========================================
-// AI IMAGE GENERATOR
-// ==========================================
+const promptInput =
+  document.getElementById("prompt");
 
-// IMPORTANT:
-// For testing only. Never expose a real API token
-// in a public GitHub repository.
+const styleInput =
+  document.getElementById("style");
 
-const HF_TOKEN = "YOUR_HUGGING_FACE_TOKEN";
+const qualityInput =
+  document.getElementById("quality");
 
-// Model used for image generation
-const MODEL_ID = "black-forest-labs/FLUX.1-schnell";
+const aspectRatioInput =
+  document.getElementById("aspectRatio");
 
-const promptInput = document.getElementById("prompt");
-const styleInput = document.getElementById("style");
-const qualityInput = document.getElementById("quality");
+const negativePromptInput =
+  document.getElementById("negativePrompt");
 
-const generateBtn = document.getElementById("generateBtn");
-const btnText = document.getElementById("btnText");
-const loader = document.getElementById("loader");
+const generateBtn =
+  document.getElementById("generateBtn");
 
-const emptyState = document.getElementById("emptyState");
-const resultContainer = document.getElementById("resultContainer");
-const generatedImage = document.getElementById("generatedImage");
+const buttonText =
+  document.getElementById("buttonText");
 
-const downloadBtn = document.getElementById("downloadBtn");
-const newImageBtn = document.getElementById("newImageBtn");
-const errorMessage = document.getElementById("errorMessage");
+const loadingSpinner =
+  document.getElementById("loadingSpinner");
+
+const characterCount =
+  document.getElementById("characterCount");
+
+const errorMessage =
+  document.getElementById("errorMessage");
+
+const emptyState =
+  document.getElementById("emptyState");
+
+const loadingState =
+  document.getElementById("loadingState");
+
+const resultState =
+  document.getElementById("resultState");
+
+const generatedImage =
+  document.getElementById("generatedImage");
+
+const downloadBtn =
+  document.getElementById("downloadBtn");
+
+const newImageBtn =
+  document.getElementById("newImageBtn");
+
 
 let currentImageBlob = null;
 
-// Generate image
-generateBtn.addEventListener("click", generateImage);
+
+// ==========================================
+// CHARACTER COUNTER
+// ==========================================
+
+promptInput.addEventListener(
+  "input",
+  () => {
+
+    characterCount.textContent =
+      promptInput.value.length;
+
+  }
+);
+
+
+// ==========================================
+// GENERATE IMAGE
+// ==========================================
+
+generateBtn.addEventListener(
+  "click",
+  generateImage
+);
+
 
 async function generateImage() {
-  const prompt = promptInput.value.trim();
-  const style = styleInput.value;
-  const quality = qualityInput.value;
+
+  const prompt =
+    promptInput.value.trim();
 
   if (!prompt) {
-    showError("Please enter a description for your image.");
-    return;
-  }
 
-  if (HF_TOKEN === "YOUR_HUGGING_FACE_TOKEN") {
     showError(
-      "Please add your Hugging Face API token in script.js before generating."
+      "Please enter a prompt first."
     );
+
     return;
   }
 
-  const finalPrompt = `${prompt}, ${style}, ${quality}`;
 
-  setLoading(true);
   hideError();
 
+  setLoading(true);
+
+
+  const style =
+    styleInput.value;
+
+  const quality =
+    qualityInput.value;
+
+  const negativePrompt =
+    negativePromptInput.value.trim();
+
+  const aspectRatio =
+    aspectRatioInput.value;
+
+
+  const finalPrompt =
+    `${prompt}, ${style}, ${quality}`;
+
+
   try {
-    const response = await fetch(
-      `https://router.huggingface.co/hf-inference/models/${MODEL_ID}`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${HF_TOKEN}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          inputs: finalPrompt
-        })
-      }
-    );
+
+    const response =
+      await fetch(
+        "/api/generate",
+        {
+
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+
+            prompt:
+              finalPrompt,
+
+            negativePrompt:
+              negativePrompt,
+
+            aspectRatio:
+              aspectRatio
+
+          })
+
+        }
+      );
+
+
+    const data =
+      await response.json();
+
 
     if (!response.ok) {
-      let errorText = "Image generation failed.";
 
-      try {
-        const errorData = await response.json();
-        errorText = errorData.error || errorText;
-      } catch (e) {
-        // Keep default error
-      }
+      throw new Error(
+        data.error ||
+        "Image generation failed."
+      );
 
-      throw new Error(errorText);
     }
 
-    const imageBlob = await response.blob();
 
-    currentImageBlob = imageBlob;
+    if (!data.image) {
 
-    const imageURL = URL.createObjectURL(imageBlob);
+      throw new Error(
+        "The server did not return an image."
+      );
 
-    generatedImage.src = imageURL;
-    generatedImage.alt = prompt;
+    }
 
-    emptyState.classList.add("hidden");
-    resultContainer.classList.remove("hidden");
+
+    const imageResponse =
+      await fetch(data.image);
+
+
+    if (!imageResponse.ok) {
+
+      throw new Error(
+        "Unable to load generated image."
+      );
+
+    }
+
+
+    currentImageBlob =
+      await imageResponse.blob();
+
+
+    const imageURL =
+      URL.createObjectURL(
+        currentImageBlob
+      );
+
+
+    generatedImage.src =
+      imageURL;
+
+
+    generatedImage.alt =
+      prompt;
+
+
+    emptyState.classList.add(
+      "hidden"
+    );
+
+    loadingState.classList.add(
+      "hidden"
+    );
+
+    resultState.classList.remove(
+      "hidden"
+    );
+
 
   } catch (error) {
+
     console.error(error);
+
     showError(
       error.message ||
-      "Something went wrong. Please try again."
+      "Something went wrong."
     );
+
+    loadingState.classList.add(
+      "hidden"
+    );
+
+    emptyState.classList.remove(
+      "hidden"
+    );
+
   } finally {
+
     setLoading(false);
+
   }
+
 }
 
-// Download generated image
-downloadBtn.addEventListener("click", () => {
-  if (!currentImageBlob) return;
 
-  const imageURL = URL.createObjectURL(currentImageBlob);
-  const link = document.createElement("a");
+// ==========================================
+// DOWNLOAD
+// ==========================================
 
-  link.href = imageURL;
-  link.download = "ai-generated-image.png";
+downloadBtn.addEventListener(
+  "click",
+  () => {
 
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+    if (!currentImageBlob) {
+      return;
+    }
 
-  URL.revokeObjectURL(imageURL);
-});
 
-// Create another image
-newImageBtn.addEventListener("click", () => {
-  resultContainer.classList.add("hidden");
-  emptyState.classList.remove("hidden");
-  promptInput.focus();
-});
+    const url =
+      URL.createObjectURL(
+        currentImageBlob
+      );
 
-// Example prompt buttons
-document.querySelectorAll(".prompt-card").forEach((card) => {
-  card.addEventListener("click", () => {
-    const text = card.querySelector("span").textContent;
-    promptInput.value = text;
+
+    const link =
+      document.createElement(
+        "a"
+      );
+
+
+    link.href = url;
+
+    link.download =
+      "ai-generated-image.png";
+
+
+    document.body.appendChild(
+      link
+    );
+
+    link.click();
+
+    document.body.removeChild(
+      link
+    );
+
+
+    setTimeout(
+      () => {
+        URL.revokeObjectURL(url);
+      },
+      1000
+    );
+
+  }
+);
+
+
+// ==========================================
+// NEW IMAGE
+// ==========================================
+
+newImageBtn.addEventListener(
+  "click",
+  () => {
+
+    resultState.classList.add(
+      "hidden"
+    );
+
+    emptyState.classList.remove(
+      "hidden"
+    );
+
     promptInput.focus();
 
-    window.scrollTo({
-      top: document.querySelector(".generator-card").offsetTop - 30,
-      behavior: "smooth"
-    });
-  });
-});
-
-// Loading state
-function setLoading(isLoading) {
-  generateBtn.disabled = isLoading;
-
-  if (isLoading) {
-    btnText.classList.add("hidden");
-    loader.classList.remove("hidden");
-  } else {
-    btnText.classList.remove("hidden");
-    loader.classList.add("hidden");
   }
+);
+
+
+// ==========================================
+// EXAMPLE PROMPTS
+// ==========================================
+
+document
+  .querySelectorAll(".example")
+  .forEach(
+    (button) => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          promptInput.value =
+            button.dataset.prompt;
+
+          characterCount.textContent =
+            promptInput.value.length;
+
+          promptInput.focus();
+
+          window.scrollTo({
+            top:
+              document
+                .querySelector(
+                  ".generator"
+                )
+                .offsetTop - 30,
+
+            behavior:
+              "smooth"
+          });
+
+        }
+      );
+
+    }
+  );
+
+
+// ==========================================
+// LOADING STATE
+// ==========================================
+
+function setLoading(
+  loading
+) {
+
+  generateBtn.disabled =
+    loading;
+
+
+  if (loading) {
+
+    buttonText.classList.add(
+      "hidden"
+    );
+
+    loadingSpinner.classList.remove(
+      "hidden"
+    );
+
+    emptyState.classList.add(
+      "hidden"
+    );
+
+    resultState.classList.add(
+      "hidden"
+    );
+
+    loadingState.classList.remove(
+      "hidden"
+    );
+
+  } else {
+
+    buttonText.classList.remove(
+      "hidden"
+    );
+
+    loadingSpinner.classList.add(
+      "hidden"
+    );
+
+  }
+
 }
 
-// Error message
-function showError(message) {
-  errorMessage.textContent = message;
+
+// ==========================================
+// ERROR
+// ==========================================
+
+function showError(
+  message
+) {
+
+  errorMessage.textContent =
+    message;
+
 }
+
 
 function hideError() {
-  errorMessage.textContent = "";
+
+  errorMessage.textContent =
+    "";
+
 }
