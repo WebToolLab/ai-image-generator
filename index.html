@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>AI Image Generator | Create Images from Text</title>
+  <meta
+    name="description"
+    content="Generate AI images from text prompts using our free AI image generator."
+  />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="logo">AI<span>Studio</span></div>
+    <a href="https://github.com/" target="_blank" class="github-btn">
+      GitHub
+    </a>
+  </header>
+
+  <main class="container">
+
+    <section class="hero">
+      <p class="badge">AI-POWERED CREATIVE TOOL</p>
+
+      <h1>
+        Turn Your Ideas Into
+        <span>Stunning Images</span>
+      </h1>
+
+      <p class="subtitle">
+        Describe your imagination and let AI transform your words into
+        beautiful visuals.
+      </p>
+    </section>
+
+    <section class="generator-card">
+
+      <div class="input-section">
+        <label for="prompt">Describe your image</label>
+
+        <textarea
+          id="prompt"
+          placeholder="Example: A futuristic city floating above the clouds at sunset, cinematic lighting, ultra detailed..."
+        ></textarea>
+
+        <div class="controls">
+
+          <div class="control-group">
+            <label for="style">Style</label>
+
+            <select id="style">
+              <option value="">None</option>
+              <option value="photorealistic">Photorealistic</option>
+              <option value="digital art">Digital Art</option>
+              <option value="anime style">Anime</option>
+              <option value="oil painting">Oil Painting</option>
+              <option value="3D render">3D Render</option>
+              <option value="cinematic">Cinematic</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <label for="quality">Quality</label>
+
+            <select id="quality">
+              <option value="highly detailed">High Detail</option>
+              <option value="ultra detailed, 4K">Ultra Detail</option>
+              <option value="simple, clean">Simple</option>
+            </select>
+          </div>
+
+        </div>
+
+        <button id="generateBtn" class="generate-btn">
+          <span id="btnText">✦ Generate Image</span>
+          <span id="loader" class="loader hidden"></span>
+        </button>
+
+        <p id="errorMessage" class="error-message"></p>
+      </div>
+
+      <div class="result-section">
+
+        <div id="emptyState" class="empty-state">
+          <div class="empty-icon">✦</div>
+          <h3>Your creation will appear here</h3>
+          <p>Enter a prompt and click Generate Image to begin.</p>
+        </div>
+
+        <div id="resultContainer" class="result-container hidden">
+          <img id="generatedImage" alt="AI generated image" />
+
+          <div class="result-actions">
+            <button id="downloadBtn" class="download-btn">
+              ↓ Download Image
+            </button>
+
+            <button id="newImageBtn" class="secondary-btn">
+              Create Another
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="examples">
+      <h2>Try These Prompts</h2>
+
+      <div class="prompt-grid">
+        <button class="prompt-card">
+          🌌 <span>Galaxy landscape with mountains and glowing stars</span>
+        </button>
+
+        <button class="prompt-card">
+          🏙️ <span>Futuristic city with flying cars at night</span>
+        </button>
+
+        <button class="prompt-card">
+          🐉 <span>Fantasy dragon flying over an ancient castle</span>
+        </button>
+
+        <button class="prompt-card">
+          🌸 <span>Japanese garden in spring with soft sunlight</span>
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>© 2026 AI Studio. Built with AI technology.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
