@@ -1,142 +1,377 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
 
-  <title>AI Image Generator | Create Images from Text</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>AI Image Generator | Create AI Images</title>
+
   <meta
     name="description"
-    content="Generate AI images from text prompts using our free AI image generator."
-  />
+    content="Generate stunning AI images from text prompts with our free AI image generator."
+  >
 
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
   <header class="navbar">
-    <div class="logo">AI<span>Studio</span></div>
-    <a href="https://github.com/" target="_blank" class="github-btn">
-      GitHub
+
+    <div class="logo">
+      AI<span>Canvas</span>
+    </div>
+
+    <a
+      href="https://huggingface.co/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="nav-btn"
+    >
+      Powered by AI
     </a>
+
   </header>
 
-  <main class="container">
+
+  <main>
 
     <section class="hero">
-      <p class="badge">AI-POWERED CREATIVE TOOL</p>
+
+      <div class="badge">
+        ✦ AI IMAGE GENERATOR
+      </div>
 
       <h1>
-        Turn Your Ideas Into
+        Turn Your Words Into
         <span>Stunning Images</span>
       </h1>
 
-      <p class="subtitle">
-        Describe your imagination and let AI transform your words into
-        beautiful visuals.
+      <p>
+        Describe your idea and let AI transform your imagination
+        into a unique image.
       </p>
+
     </section>
 
-    <section class="generator-card">
 
-      <div class="input-section">
-        <label for="prompt">Describe your image</label>
+    <section class="generator">
+
+      <!-- LEFT SIDE -->
+
+      <div class="panel">
+
+        <label for="prompt">
+          Describe your image
+        </label>
 
         <textarea
           id="prompt"
-          placeholder="Example: A futuristic city floating above the clouds at sunset, cinematic lighting, ultra detailed..."
+          maxlength="2000"
+          placeholder="Example: A futuristic city at sunset, flying cars, glowing skyscrapers, cinematic lighting, ultra detailed..."
         ></textarea>
 
-        <div class="controls">
 
-          <div class="control-group">
-            <label for="style">Style</label>
+        <div class="character-count">
+          <span id="characterCount">0</span>/2000
+        </div>
+
+
+        <div class="options">
+
+          <div class="option">
+
+            <label for="style">
+              Style
+            </label>
 
             <select id="style">
-              <option value="">None</option>
-              <option value="photorealistic">Photorealistic</option>
-              <option value="digital art">Digital Art</option>
-              <option value="anime style">Anime</option>
-              <option value="oil painting">Oil Painting</option>
-              <option value="3D render">3D Render</option>
-              <option value="cinematic">Cinematic</option>
+
+              <option value="digital art">
+                Digital Art
+              </option>
+
+              <option value="photorealistic">
+                Photorealistic
+              </option>
+
+              <option value="cinematic">
+                Cinematic
+              </option>
+
+              <option value="anime">
+                Anime
+              </option>
+
+              <option value="3D render">
+                3D Render
+              </option>
+
+              <option value="oil painting">
+                Oil Painting
+              </option>
+
+              <option value="fantasy art">
+                Fantasy Art
+              </option>
+
+              <option value="watercolor">
+                Watercolor
+              </option>
+
             </select>
+
           </div>
 
-          <div class="control-group">
-            <label for="quality">Quality</label>
+
+          <div class="option">
+
+            <label for="quality">
+              Quality
+            </label>
 
             <select id="quality">
-              <option value="highly detailed">High Detail</option>
-              <option value="ultra detailed, 4K">Ultra Detail</option>
-              <option value="simple, clean">Simple</option>
+
+              <option value="highly detailed">
+                High Detail
+              </option>
+
+              <option value="ultra detailed, sharp">
+                Ultra Detail
+              </option>
+
+              <option value="clean and simple">
+                Clean
+              </option>
+
             </select>
+
           </div>
 
         </div>
 
-        <button id="generateBtn" class="generate-btn">
-          <span id="btnText">✦ Generate Image</span>
-          <span id="loader" class="loader hidden"></span>
+
+        <div class="options">
+
+          <div class="option">
+
+            <label for="aspectRatio">
+              Aspect Ratio
+            </label>
+
+            <select id="aspectRatio">
+
+              <option value="square">
+                Square 1:1
+              </option>
+
+              <option value="portrait">
+                Portrait 4:5
+              </option>
+
+              <option value="landscape">
+                Landscape 16:9
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="option">
+
+            <label for="negativePrompt">
+              Negative Prompt
+            </label>
+
+            <input
+              id="negativePrompt"
+              type="text"
+              placeholder="blurry, distorted, low quality"
+            >
+
+          </div>
+
+        </div>
+
+
+        <button
+          id="generateBtn"
+          class="generate-btn"
+        >
+
+          <span id="buttonText">
+            ✦ Generate Image
+          </span>
+
+          <span
+            id="loadingSpinner"
+            class="spinner hidden"
+          ></span>
+
         </button>
 
-        <p id="errorMessage" class="error-message"></p>
+
+        <div
+          id="errorMessage"
+          class="error"
+        ></div>
+
       </div>
 
-      <div class="result-section">
 
-        <div id="emptyState" class="empty-state">
-          <div class="empty-icon">✦</div>
-          <h3>Your creation will appear here</h3>
-          <p>Enter a prompt and click Generate Image to begin.</p>
+      <!-- RIGHT SIDE -->
+
+      <div class="result-panel">
+
+        <div
+          id="emptyState"
+          class="empty-state"
+        >
+
+          <div class="empty-icon">
+            ✦
+          </div>
+
+          <h2>
+            Your image will appear here
+          </h2>
+
+          <p>
+            Enter a prompt and click Generate Image.
+          </p>
+
         </div>
 
-        <div id="resultContainer" class="result-container hidden">
-          <img id="generatedImage" alt="AI generated image" />
 
-          <div class="result-actions">
-            <button id="downloadBtn" class="download-btn">
-              ↓ Download Image
+        <div
+          id="loadingState"
+          class="loading-state hidden"
+        >
+
+          <div class="big-spinner"></div>
+
+          <h2>
+            Creating your image...
+          </h2>
+
+          <p>
+            AI is turning your prompt into an image.
+          </p>
+
+        </div>
+
+
+        <div
+          id="resultState"
+          class="result-state hidden"
+        >
+
+          <img
+            id="generatedImage"
+            alt="AI generated image"
+          >
+
+
+          <div class="actions">
+
+            <button
+              id="downloadBtn"
+              class="download-btn"
+            >
+              ↓ Download
             </button>
 
-            <button id="newImageBtn" class="secondary-btn">
-              Create Another
+            <button
+              id="newImageBtn"
+              class="new-btn"
+            >
+              + New Image
             </button>
+
           </div>
+
         </div>
 
       </div>
 
     </section>
 
+
+    <!-- EXAMPLES -->
+
     <section class="examples">
-      <h2>Try These Prompts</h2>
 
-      <div class="prompt-grid">
-        <button class="prompt-card">
-          🌌 <span>Galaxy landscape with mountains and glowing stars</span>
+      <h2>
+        Try These Prompts
+      </h2>
+
+      <div class="example-grid">
+
+        <button
+          class="example"
+          data-prompt="A futuristic city at sunset with flying cars, glowing skyscrapers, cinematic lighting"
+        >
+          🌆
+          <span>
+            Futuristic city
+          </span>
         </button>
 
-        <button class="prompt-card">
-          🏙️ <span>Futuristic city with flying cars at night</span>
+
+        <button
+          class="example"
+          data-prompt="A magical forest with glowing mushrooms, fireflies and a mysterious ancient castle"
+        >
+          🌲
+          <span>
+            Magical forest
+          </span>
         </button>
 
-        <button class="prompt-card">
-          🐉 <span>Fantasy dragon flying over an ancient castle</span>
+
+        <button
+          class="example"
+          data-prompt="A cute astronaut cat exploring Mars with a futuristic space station in the background"
+        >
+          🚀
+          <span>
+            Astronaut cat
+          </span>
         </button>
 
-        <button class="prompt-card">
-          🌸 <span>Japanese garden in spring with soft sunlight</span>
+
+        <button
+          class="example"
+          data-prompt="A luxury modern house beside a peaceful lake surrounded by mountains at golden hour"
+        >
+          🏡
+          <span>
+            Luxury house
+          </span>
         </button>
+
       </div>
+
     </section>
 
   </main>
 
+
   <footer>
-    <p>© 2026 AI Studio. Built with AI technology.</p>
+
+    <p>
+      AI Canvas © 2026
+    </p>
+
   </footer>
 
+
   <script src="script.js"></script>
+
 </body>
 </html>
