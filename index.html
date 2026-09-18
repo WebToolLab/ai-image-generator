@@ -1,377 +1,334 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+    <title>AI Image Generator</title>
+    <meta
+        name="description"
+        content="Create AI-generated images from simple text prompts."
+    >
 
-  <title>AI Image Generator | Create AI Images</title>
-
-  <meta
-    name="description"
-    content="Generate stunning AI images from text prompts with our free AI image generator."
-  >
-
-  <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <header class="navbar">
-
-    <div class="logo">
-      AI<span>Canvas</span>
-    </div>
-
-    <a
-      href="https://huggingface.co/"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="nav-btn"
-    >
-      Powered by AI
-    </a>
-
-  </header>
-
-
-  <main>
-
-    <section class="hero">
-
-      <div class="badge">
-        ✦ AI IMAGE GENERATOR
-      </div>
-
-      <h1>
-        Turn Your Words Into
-        <span>Stunning Images</span>
-      </h1>
-
-      <p>
-        Describe your idea and let AI transform your imagination
-        into a unique image.
-      </p>
-
-    </section>
-
-
-    <section class="generator">
-
-      <!-- LEFT SIDE -->
-
-      <div class="panel">
-
-        <label for="prompt">
-          Describe your image
-        </label>
-
-        <textarea
-          id="prompt"
-          maxlength="2000"
-          placeholder="Example: A futuristic city at sunset, flying cars, glowing skyscrapers, cinematic lighting, ultra detailed..."
-        ></textarea>
-
-
-        <div class="character-count">
-          <span id="characterCount">0</span>/2000
+    <header class="topbar">
+        <div class="logo">
+            <span class="logo-icon">✦</span>
+            <span>AI Image Generator</span>
         </div>
 
-
-        <div class="options">
-
-          <div class="option">
-
-            <label for="style">
-              Style
-            </label>
-
-            <select id="style">
-
-              <option value="digital art">
-                Digital Art
-              </option>
-
-              <option value="photorealistic">
-                Photorealistic
-              </option>
-
-              <option value="cinematic">
-                Cinematic
-              </option>
-
-              <option value="anime">
-                Anime
-              </option>
-
-              <option value="3D render">
-                3D Render
-              </option>
-
-              <option value="oil painting">
-                Oil Painting
-              </option>
-
-              <option value="fantasy art">
-                Fantasy Art
-              </option>
-
-              <option value="watercolor">
-                Watercolor
-              </option>
-
-            </select>
-
-          </div>
-
-
-          <div class="option">
-
-            <label for="quality">
-              Quality
-            </label>
-
-            <select id="quality">
-
-              <option value="highly detailed">
-                High Detail
-              </option>
-
-              <option value="ultra detailed, sharp">
-                Ultra Detail
-              </option>
-
-              <option value="clean and simple">
-                Clean
-              </option>
-
-            </select>
-
-          </div>
-
+        <div class="badge">
+            AI Powered
         </div>
+    </header>
 
 
-        <div class="options">
+    <main class="container">
 
-          <div class="option">
+        <section class="hero">
+            <p class="eyebrow">CREATE WITH AI</p>
 
-            <label for="aspectRatio">
-              Aspect Ratio
-            </label>
+            <h1>
+                Turn your ideas into
+                <span>images</span>
+            </h1>
 
-            <select id="aspectRatio">
+            <p class="hero-text">
+                Describe anything you want and generate an AI image in seconds.
+            </p>
+        </section>
 
-              <option value="square">
-                Square 1:1
-              </option>
 
-              <option value="portrait">
-                Portrait 4:5
-              </option>
+        <section class="generator">
 
-              <option value="landscape">
-                Landscape 16:9
-              </option>
+            <div class="panel">
 
-            </select>
+                <div class="panel-header">
+                    <h2>Create Image</h2>
+                    <span>Free AI Generator</span>
+                </div>
 
-          </div>
 
+                <label for="prompt">
+                    Describe your image
+                </label>
 
-          <div class="option">
+                <textarea
+                    id="prompt"
+                    maxlength="2000"
+                    placeholder="Example: A futuristic city at sunset, flying cars, cinematic lighting, ultra realistic..."
+                ></textarea>
 
-            <label for="negativePrompt">
-              Negative Prompt
-            </label>
+                <div class="character-count">
+                    <span id="charCount">0</span>/2000
+                </div>
 
-            <input
-              id="negativePrompt"
-              type="text"
-              placeholder="blurry, distorted, low quality"
-            >
 
-          </div>
+                <div class="form-grid">
 
-        </div>
+                    <div class="field">
 
+                        <label for="style">
+                            Style
+                        </label>
 
-        <button
-          id="generateBtn"
-          class="generate-btn"
-        >
+                        <select id="style">
 
-          <span id="buttonText">
-            ✦ Generate Image
-          </span>
+                            <option value="photorealistic">
+                                Photorealistic
+                            </option>
 
-          <span
-            id="loadingSpinner"
-            class="spinner hidden"
-          ></span>
+                            <option value="cinematic">
+                                Cinematic
+                            </option>
 
-        </button>
+                            <option value="digital art">
+                                Digital Art
+                            </option>
 
+                            <option value="anime">
+                                Anime
+                            </option>
 
-        <div
-          id="errorMessage"
-          class="error"
-        ></div>
+                            <option value="3D render">
+                                3D Render
+                            </option>
 
-      </div>
+                            <option value="oil painting">
+                                Oil Painting
+                            </option>
 
+                            <option value="watercolor">
+                                Watercolor
+                            </option>
 
-      <!-- RIGHT SIDE -->
+                            <option value="fantasy art">
+                                Fantasy Art
+                            </option>
 
-      <div class="result-panel">
+                        </select>
 
-        <div
-          id="emptyState"
-          class="empty-state"
-        >
+                    </div>
 
-          <div class="empty-icon">
-            ✦
-          </div>
 
-          <h2>
-            Your image will appear here
-          </h2>
+                    <div class="field">
 
-          <p>
-            Enter a prompt and click Generate Image.
-          </p>
+                        <label for="quality">
+                            Quality
+                        </label>
 
-        </div>
+                        <select id="quality">
 
+                            <option value="high quality">
+                                High
+                            </option>
 
-        <div
-          id="loadingState"
-          class="loading-state hidden"
-        >
+                            <option value="ultra detailed">
+                                Ultra
+                            </option>
 
-          <div class="big-spinner"></div>
+                            <option value="professional">
+                                Professional
+                            </option>
 
-          <h2>
-            Creating your image...
-          </h2>
+                        </select>
 
-          <p>
-            AI is turning your prompt into an image.
-          </p>
+                    </div>
 
-        </div>
 
+                    <div class="field">
 
-        <div
-          id="resultState"
-          class="result-state hidden"
-        >
+                        <label for="aspectRatio">
+                            Aspect Ratio
+                        </label>
 
-          <img
-            id="generatedImage"
-            alt="AI generated image"
-          >
+                        <select id="aspectRatio">
 
+                            <option value="square">
+                                Square 1:1
+                            </option>
 
-          <div class="actions">
+                            <option value="portrait">
+                                Portrait 4:5
+                            </option>
 
-            <button
-              id="downloadBtn"
-              class="download-btn"
-            >
-              ↓ Download
-            </button>
+                            <option value="landscape">
+                                Landscape 16:9
+                            </option>
 
-            <button
-              id="newImageBtn"
-              class="new-btn"
-            >
-              + New Image
-            </button>
+                        </select>
 
-          </div>
+                    </div>
 
-        </div>
+                </div>
 
-      </div>
 
-    </section>
+                <label for="negativePrompt">
+                    Negative Prompt
+                    <span class="optional">
+                        Optional
+                    </span>
+                </label>
 
+                <input
+                    type="text"
+                    id="negativePrompt"
+                    placeholder="blurry, distorted, low quality..."
+                >
 
-    <!-- EXAMPLES -->
 
-    <section class="examples">
+                <button
+                    id="generateBtn"
+                    class="generate-btn"
+                >
 
-      <h2>
-        Try These Prompts
-      </h2>
+                    <span id="buttonText">
+                        ✨ Generate Image
+                    </span>
 
-      <div class="example-grid">
+                    <span
+                        id="loader"
+                        class="loader hidden"
+                    ></span>
 
-        <button
-          class="example"
-          data-prompt="A futuristic city at sunset with flying cars, glowing skyscrapers, cinematic lighting"
-        >
-          🌆
-          <span>
-            Futuristic city
-          </span>
-        </button>
+                </button>
 
 
-        <button
-          class="example"
-          data-prompt="A magical forest with glowing mushrooms, fireflies and a mysterious ancient castle"
-        >
-          🌲
-          <span>
-            Magical forest
-          </span>
-        </button>
+                <div
+                    id="errorMessage"
+                    class="error hidden"
+                ></div>
 
+            </div>
 
-        <button
-          class="example"
-          data-prompt="A cute astronaut cat exploring Mars with a futuristic space station in the background"
-        >
-          🚀
-          <span>
-            Astronaut cat
-          </span>
-        </button>
 
+            <div class="result-panel">
 
-        <button
-          class="example"
-          data-prompt="A luxury modern house beside a peaceful lake surrounded by mountains at golden hour"
-        >
-          🏡
-          <span>
-            Luxury house
-          </span>
-        </button>
+                <div class="result-header">
 
-      </div>
+                    <h2>Result</h2>
 
-    </section>
+                    <span id="statusText">
+                        Ready
+                    </span>
 
-  </main>
+                </div>
 
 
-  <footer>
+                <div
+                    id="imageContainer"
+                    class="image-container"
+                >
 
-    <p>
-      AI Canvas © 2026
-    </p>
+                    <div
+                        id="placeholder"
+                        class="placeholder"
+                    >
 
-  </footer>
+                        <div class="placeholder-icon">
+                            ✦
+                        </div>
 
+                        <h3>
+                            Your image will appear here
+                        </h3>
 
-  <script src="script.js"></script>
+                        <p>
+                            Enter a prompt and click Generate Image.
+                        </p>
+
+                    </div>
+
+
+                    <img
+                        id="generatedImage"
+                        class="generated-image hidden"
+                        alt="AI generated image"
+                    >
+
+                </div>
+
+
+                <div
+                    id="resultActions"
+                    class="result-actions hidden"
+                >
+
+                    <button
+                        id="downloadBtn"
+                        class="download-btn"
+                    >
+                        ↓ Download
+                    </button>
+
+                    <button
+                        id="newImageBtn"
+                        class="new-btn"
+                    >
+                        + New Image
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="features">
+
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+
+                <h3>Fast Generation</h3>
+
+                <p>
+                    Generate images from your ideas in seconds.
+                </p>
+            </div>
+
+
+            <div class="feature">
+                <div class="feature-icon">🎨</div>
+
+                <h3>Multiple Styles</h3>
+
+                <p>
+                    Create photorealistic, anime, cinematic and artistic images.
+                </p>
+            </div>
+
+
+            <div class="feature">
+                <div class="feature-icon">🔒</div>
+
+                <h3>Secure</h3>
+
+                <p>
+                    Your Hugging Face API token stays on the server.
+                </p>
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        <p>
+            AI Image Generator
+            © 2026
+        </p>
+
+    </footer>
+
+
+    <script src="script.js"></script>
 
 </body>
 </html>
